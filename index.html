@@ -2020,6 +2020,88 @@
             }
         }
 
+        @media (max-width: 750px) {
+            .produtos {
+                overflow: hidden;
+                padding-right: 0;
+                padding-left: 0;
+            }
+
+            .produtos .titulo,
+            .produtos .subtitulo {
+                margin-right: 18px;
+                margin-left: 18px;
+                text-align: left;
+            }
+
+            .produtos .titulo {
+                margin-bottom: 10px;
+                font-size: 30px;
+            }
+
+            .produtos .subtitulo {
+                margin-bottom: 18px;
+            }
+
+            .produtos-grid {
+                display: grid;
+                width: 100%;
+                max-width: none;
+                grid-auto-flow: column;
+                grid-auto-columns: min(84%, 340px);
+                grid-template-columns: none;
+                gap: 14px;
+                margin: 0;
+                overflow-x: auto;
+                padding: 6px 18px 18px;
+                overscroll-behavior-x: contain;
+                scroll-snap-type: x mandatory;
+                scrollbar-width: none;
+            }
+
+            .produtos-grid::-webkit-scrollbar {
+                display: none;
+            }
+
+            .produto {
+                min-width: 0;
+                scroll-snap-align: start;
+            }
+
+            .produto-imagem {
+                height: auto;
+                aspect-ratio: 4 / 5;
+            }
+
+            .produto-imagem img {
+                object-fit: cover;
+            }
+
+            .produto-info {
+                padding: 16px;
+            }
+
+            .produto-tag {
+                margin-bottom: 7px;
+                font-size: 9px;
+                letter-spacing: 1.5px;
+            }
+
+            .produto-info h3 {
+                margin-bottom: 7px;
+                font-size: 18px;
+            }
+
+            .produto-info p {
+                margin-bottom: 10px;
+                font-size: 13px;
+            }
+
+            .preco {
+                margin-bottom: 12px;
+            }
+        }
+
     </style>
     <link rel="stylesheet" href="assets/css/tema-automatico.css">
 
@@ -2231,7 +2313,7 @@ O teu navegador não suporta este vídeo.
                 data-product-price="11.000 Kz"
                 data-ai-model="Modelo FRAN7 01"
                 data-product-reserve="true"
-                data-gallery-images="TRIBE.CASTANHA.jpeg|TRIBLE.BEIGE.jpeg|TIBLE.CINZA.jpeg"
+                data-gallery-images="assets/images/TRIBE.CASTANHA.jpeg|assets/images/TRIBLE.BEIGE.jpeg|assets/images/TIBLE.CINZA.jpeg"
                 data-gallery-colors="Preto|Castanho|Bege|Cinza"
             >
 
@@ -2289,7 +2371,7 @@ O teu navegador não suporta este vídeo.
                 <div class="produto-imagem">
 
                     <img
-                        src="assets/images/2.jpg.jpeg"
+                        src="assets/images/2.JPG.jpeg"
                         alt="T-shirt FRAN7"
                     >
 

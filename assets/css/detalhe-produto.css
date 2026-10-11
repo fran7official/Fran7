@@ -78,8 +78,7 @@
     padding-bottom: 4px;
 }
 
-.fran7-product-thumbnail,
-.fran7-product-thumbnail-placeholder {
+.fran7-product-thumbnail {
     display: grid;
     min-width: 64px;
     aspect-ratio: 1;
@@ -165,13 +164,6 @@
     font-weight: 700;
 }
 
-.fran7-product-color-help {
-    margin: -10px 0 0;
-    font-size: 12px;
-    line-height: 1.5;
-    opacity: .7;
-}
-
 .fran7-product-color-label span {
     font-weight: 400;
     opacity: .65;
@@ -199,76 +191,6 @@
     cursor: pointer;
 }
 
-.fran7-product-comments {
-    padding: 32px clamp(20px, 4vw, 42px) 40px;
-}
-
-.fran7-product-comments h3 {
-    margin: 0 0 8px;
-    font-size: 21px;
-}
-
-.fran7-product-comments > p {
-    margin: 0 0 18px;
-    font-size: 13px;
-    line-height: 1.6;
-    opacity: .7;
-}
-
-.fran7-product-comment-form {
-    display: grid;
-    grid-template-columns: minmax(150px, .75fr) minmax(0, 1.5fr) auto;
-    gap: 10px;
-}
-
-.fran7-product-comment-form input,
-.fran7-product-comment-form textarea {
-    min-width: 0;
-    min-height: 52px;
-    padding: 13px;
-    border: 1px solid color-mix(in srgb, CanvasText 25%, transparent);
-    border-radius: 0;
-    background: Canvas;
-    color: CanvasText;
-    font: inherit;
-}
-
-.fran7-product-comment-form textarea {
-    resize: vertical;
-}
-
-.fran7-product-comment-form button {
-    padding: 0 18px;
-    border: 1px solid CanvasText;
-    background: CanvasText;
-    color: Canvas;
-    font-size: 11px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.fran7-product-comment-list {
-    display: grid;
-    gap: 12px;
-    margin-top: 18px;
-}
-
-.fran7-product-comment {
-    padding: 12px 0;
-    border-bottom: 1px solid color-mix(in srgb, CanvasText 14%, transparent);
-}
-
-.fran7-product-comment strong,
-.fran7-product-comment p {
-    margin: 0;
-}
-
-.fran7-product-comment p {
-    margin-top: 5px;
-    line-height: 1.6;
-    opacity: .75;
-}
-
 @media (max-width: 680px) {
     .fran7-product-overlay {
         padding: 0;
@@ -286,25 +208,46 @@
     }
 
     .fran7-product-gallery {
-        padding: 12px;
+        padding: 8px;
     }
 
     .fran7-product-main-image,
     .fran7-product-main-placeholder {
-        max-height: 54dvh;
+        max-height: 42dvh;
+    }
+
+    .fran7-product-thumbnails {
+        grid-auto-columns: minmax(54px, 1fr);
+        gap: 6px;
+        margin-top: 8px;
     }
 
     .fran7-product-details {
-        gap: 13px;
-        padding: 24px 20px;
+        gap: 8px;
+        padding: 16px;
     }
 
-    .fran7-product-comment-form {
-        grid-template-columns: 1fr;
+    .fran7-product-name {
+        font-size: 23px;
     }
 
-    .fran7-product-comment-form button {
-        min-height: 48px;
+    .fran7-product-price {
+        font-size: 18px;
+    }
+
+    .fran7-product-description,
+    .fran7-product-note {
+        font-size: 11px;
+        line-height: 1.45;
+    }
+
+    .fran7-product-note {
+        padding: 9px;
+    }
+
+    .fran7-product-add {
+        min-height: 42px;
+        padding: 10px 14px;
     }
 }
 

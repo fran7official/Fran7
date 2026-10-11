@@ -21,22 +21,9 @@
                     <p class="fran7-product-color" hidden></p>
                     <p class="fran7-product-description"></p>
                     <p class="fran7-product-note">Confirma tamanhos, cores e disponibilidade com a FRAN7 antes de concluir o pedido.</p>
-                    <p class="fran7-product-color-help">Seleciona uma fotografia para ver outra cor, quando disponível, e indica a cor pretendida.</p>
-                    <label class="fran7-product-color-label" for="fran7ProductColor">Cor pretendida <span>(obrigatório)</span></label>
-                    <input class="fran7-product-color-input" id="fran7ProductColor" type="text" maxlength="40" placeholder="Ex.: preto, branco..." autocomplete="off" required>
                     <button class="fran7-product-add" type="button">ADICIONAR À SACOLA</button>
                 </div>
             </div>
-            <section class="fran7-product-comments" aria-labelledby="fran7ProductCommentsTitle">
-                <h3 id="fran7ProductCommentsTitle">O que achaste desta peça?</h3>
-                <p>A opinião é opcional. Partilha o que achaste desta peça com a comunidade FRAN7.</p>
-                <form class="fran7-product-comment-form">
-                    <input name="name" type="text" maxlength="80" placeholder="O teu nome" autocomplete="name" required>
-                    <textarea name="comment" maxlength="500" placeholder="Escreve um comentário..." required></textarea>
-                    <button type="submit">PUBLICAR</button>
-                </form>
-                <div class="fran7-product-comment-list" aria-live="polite"></div>
-            </section>
         </section>
     `;
 
@@ -47,9 +34,7 @@
     const thumbnails = overlay.querySelector(".fran7-product-thumbnails");
     const closeButton = overlay.querySelector(".fran7-product-close");
     const addButton = overlay.querySelector(".fran7-product-add");
-    const colorInput = overlay.querySelector(".fran7-product-color-input");
-    const commentForm = overlay.querySelector(".fran7-product-comment-form");
-    const commentList = overlay.querySelector(".fran7-product-comment-list");
+    const colorLabel = overlay.querySelector(".fran7-product-color");
     let currentProduct = null;
     let selectedImage = "";
     let selectedColor = "";
@@ -109,18 +94,8 @@
     function renderGallery(product) {
         thumbnails.replaceChildren();
         const sources = product.images.slice();
-        while (sources.length < IMAGE_LIMIT) sources.push("");
 
         sources.forEach(function(src, index) {
-            if (!src) {
-                const placeholder = document.createElement("div");
-                placeholder.className = "fran7-product-thumbnail-placeholder";
-                placeholder.textContent = "Outra cor";
-                placeholder.setAttribute("aria-label", "Espaço para fotografia adicional " + index);
-                thumbnails.appendChild(placeholder);
-                return;
-            }
-
             const button = document.createElement("button");
             button.className = "fran7-product-thumbnail";
             button.type = "button";
@@ -142,39 +117,9 @@
 
     function atualizarCorSelecionada(index) {
         const galleryColor = currentProduct.colors[index] || "";
-        if (galleryColor) {
-            selectedColor = galleryColor;
-            colorInput.value = galleryColor;
-        }
-        const colorLabel = overlay.querySelector(".fran7-product-color");
+        selectedColor = galleryColor;
         colorLabel.textContent = selectedColor ? "Cor: " + selectedColor : "";
         colorLabel.hidden = !selectedColor;
-    }
-
-    function commentsStorageKey(product) {
-        return "fran7_detalhe_comentarios_" + product.id;
-    }
-
-    function renderComments() {
-        let comments = [];
-        try {
-            comments = JSON.parse(localStorage.getItem(commentsStorageKey(currentProduct)) || "[]");
-            if (!Array.isArray(comments)) comments = [];
-        } catch (error) {
-            console.error("Não foi possível carregar os comentários do produto:", error);
-        }
-
-        commentList.replaceChildren();
-        comments.forEach(function(comment) {
-            const item = document.createElement("article");
-            item.className = "fran7-product-comment";
-            const author = document.createElement("strong");
-            author.textContent = comment.name;
-            const text = document.createElement("p");
-            text.textContent = comment.text;
-            item.append(author, text);
-            commentList.appendChild(item);
-        });
     }
 
     function openProduct(article) {
@@ -185,18 +130,8 @@
         overlay.querySelector(".fran7-product-description").textContent = currentProduct.description;
         addButton.textContent = currentProduct.reservar ? "RESERVAR" : "ADICIONAR À SACOLA";
         selectedColor = "";
-        colorInput.value = "";
         renderGallery(currentProduct);
         selectedImage = currentProduct.images[0] || "";
-        renderComments();
-
-        let customer = null;
-        try {
-            customer = JSON.parse(localStorage.getItem("usuarioFRAN7") || "null");
-        } catch (error) {
-            console.error("Não foi possível ler os dados do cliente para o comentário:", error);
-        }
-        commentForm.elements.name.value = typeof customer?.nome === "string" ? customer.nome : "";
         overlay.hidden = false;
         document.body.style.overflow = "hidden";
         closeButton.focus();
@@ -240,14 +175,10 @@
     });
 
     addButton.addEventListener("click", function() {
-        selectedColor = colorInput.value.trim();
-        if (!selectedColor) {
-            colorInput.setCustomValidity("Indica a cor pretendida antes de continuar.");
-            colorInput.reportValidity();
-            colorInput.focus();
+        if (currentProduct.colors.length > 0 && !selectedColor) {
+            window.alert("Seleciona a fotografia da cor que pretendes.");
             return;
         }
-        colorInput.setCustomValidity("");
 
         const source = currentProduct.article.querySelector(".botao-produto");
         const price = Number((currentProduct.price.match(/[\d.]+/) || ["0"])[0].replace(/\./g, "")) || 0;
@@ -271,35 +202,6 @@
                 selectedColor
             );
         }
-    });
-
-    colorInput.addEventListener("input", function() {
-        colorInput.setCustomValidity("");
-        selectedColor = colorInput.value.trim();
-        const colorLabel = overlay.querySelector(".fran7-product-color");
-        colorLabel.textContent = selectedColor ? "Cor: " + selectedColor : "";
-        colorLabel.hidden = !selectedColor;
-    });
-
-    commentForm.addEventListener("submit", function(event) {
-        event.preventDefault();
-        const name = commentForm.elements.name.value.trim();
-        const text = commentForm.elements.comment.value.trim();
-        if (!name || !text) return;
-
-        try {
-            const comments = JSON.parse(localStorage.getItem(commentsStorageKey(currentProduct)) || "[]");
-            if (!Array.isArray(comments)) throw new Error("Formato de comentários inválido.");
-            comments.unshift({ name: name, text: text, createdAt: new Date().toISOString() });
-            localStorage.setItem(commentsStorageKey(currentProduct), JSON.stringify(comments.slice(0, 30)));
-        } catch (error) {
-            console.error("Não foi possível guardar o comentário do produto:", error);
-            window.alert("Não foi possível guardar o comentário. Tenta novamente.");
-            return;
-        }
-
-        commentForm.elements.comment.value = "";
-        renderComments();
     });
 
     closeButton.addEventListener("click", closeProduct);
